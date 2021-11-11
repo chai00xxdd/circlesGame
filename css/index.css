@@ -1,0 +1,51 @@
+body{
+    background-color: #5e5e5e;
+}
+#GameBoard
+{
+   
+   
+    height: 500px;
+    width: 900px;
+    min-width: 500px;
+    max-width: 1500px;
+    border:solid;
+    left:300px;
+    position:absolute;
+    top:50px;
+}
+
+
+
+.circle {
+    height: 50px;
+    width: 50px;
+    background-color: yellow;
+    border-radius: 50%;
+    position:absolute;
+    
+    
+  }
+
+#ButtonsPanel
+{
+    margin-top:10px;
+    position:absolute;
+    top:560px;
+    left:600px;
+}
+#ButtonsPanel :nth-child(n)
+{
+    margin-right: 15px;
+  
+}
+
+#TimeTextBox
+{
+    width: 200px;
+}
+
+
+
+
+
