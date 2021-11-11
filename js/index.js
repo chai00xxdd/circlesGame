@@ -117,8 +117,12 @@ function reset_button_click() {
 
 }
 function initGame() {
+    const screen_width = screen.width;
+    //  console.log(screen_width);
     g_state.circles = [];
     g_state.board = document.querySelector("#GameBoard");
+    g_state.board.style.width = parseInt((0.5 * screen_width)) + "px";
+    console.log(g_state.board.style.width);
     g_state.delay = 1000;
     g_state.gameLoop = null;
     g_state.ball_size = 50;
