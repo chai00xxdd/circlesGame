@@ -59,8 +59,12 @@ function animate_circles() {
 }
 
 function start_button_click() {
+    window.onbeforeunload = function (e) {
+        return "are you sure you want to exit";
+    };
     console.log("start clicked");
     g_state.startGame();
+
 
 }
 
@@ -84,6 +88,7 @@ function is_ball_collition(circle1, circle2) {
 
 }
 function pause_button_click() {
+    window.onbeforeunload = null;
     console.log("pause clicked");
     g_state.pauseGame();
 }
