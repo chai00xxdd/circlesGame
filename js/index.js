@@ -4,6 +4,7 @@ g_state.x = 5;
 initButtons();
 initGame();
 
+
 function random(number) {
     return parseInt(Math.random() * number);
 }
@@ -38,6 +39,7 @@ function animate_circles() {
         for (let j = i + 1; j < circles.length; j++) {
             if (is_ball_collition(circles[i], circles[j])) {
                 circlesCollition[i] = true;
+                make_ball_collition_sound();
             }
         }
     }
@@ -146,12 +148,18 @@ function initGame() {
             g_state.gameLoop = setInterval(animate_circles, 20);
         }
     }
+
+
     let width = g_state.get_width();
     console.log(g_state.get_height());
     reset_button_click();
 
 
 
+}
+
+function make_ball_collition_sound() {
+    new Audio("music/ballCollition.mp3").play();
 }
 
 function create_random_circle(x, y) {
