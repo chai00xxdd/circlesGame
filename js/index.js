@@ -57,16 +57,30 @@ function animate_circles() {
 
     g_state.circles = newCricles;
 
+    g_state.time_passed += g_state.refresh_rate;
+    if (g_state.time_passed >= 1000 && g_state.time_input.value.length != 0) {
+        g_state.time_input.value--;
+        g_state.time_passed = 0;
+    }
+
+    const time_value = g_state.time_input.value;
+    const to_stop = g_state.circles.length == 1 || (time_value.length != 0 && time_value == 0);
+    if (to_stop) {
+        pause_button_click();
+        g_state.start_button.disabled = true;
+    }
+
 
 }
 
 function start_button_click() {
+
     window.onbeforeunload = function (e) {
         return "are you sure you want to exit";
     };
     console.log("start clicked");
     g_state.startGame();
-
+    //  g_state.time_input.value = 5;
 
 }
 
@@ -90,6 +104,7 @@ function is_ball_collition(circle1, circle2) {
 function pause_button_click() {
     window.onbeforeunload = null;
     console.log("pause clicked");
+    g_state.time_input.disabled = false;
     g_state.pauseGame();
 }
 
@@ -97,6 +112,11 @@ function pause_button_click() {
 function reset_button_click() {
 
     g_state.pauseGame();
+    g_state.time_passed = 0;
+    g_state.start_button.disabled = false;
+    if (g_state.time_tostop != null) {
+        g_state.time_input.value = g_state.time_tostop;
+    }
     g_state.time_input.disabled = false;
     for (let circle in g_state.circle) {
         circle.remove();
@@ -127,15 +147,18 @@ function initGame() {
     const screen_height = screen.height;
     //  console.log(screen_width);
     g_state.circles = [];
+    g_state.time_tostop = null;
+    g_state.time_passed = 0;
     g_state.board = document.querySelector("#GameBoard");
     g_state.time_input = document.querySelector("#time_input");
+    g_state.time_input.addEventListener("input", time_input_value_change);
     g_state.board.style.width = parseInt((0.9 * screen_width)) + "px";
     g_state.board.style.height = parseInt((0.5 * screen_height)) + "px";
     const buttons_panel = document.querySelector("#ButtonsPanel");
     buttons_panel.style.top = (parseInt((0.5 * screen_height)) + 50) + "px";
 
     console.log(g_state.board.style.width);
-    g_state.delay = 1000;
+    g_state.refresh_rate = 20;
     g_state.gameLoop = null;
     g_state.ball_size = 50;
     g_state.get_width = function () { return g_state.board.clientWidth; }
@@ -151,7 +174,7 @@ function initGame() {
     g_state.startGame = function () {
         g_state.time_input.disabled = true;
         if (g_state.gameLoop == null) {
-            g_state.gameLoop = setInterval(animate_circles, 20);
+            g_state.gameLoop = setInterval(animate_circles, g_state.refresh_rate);
         }
     }
 
@@ -175,6 +198,35 @@ function create_random_circle(x, y) {
     console.log("x speed = " + x_speed + " y speed = " + y_speed);
     return create_circle(x, y, x_speed, y_speed);
 }
+
+function time_input_value_change() {
+
+    if (g_state.time_input.value.length == 0) {
+        g_state.time_tostop = null;
+        if (g_state.circles.length != 1) {
+            g_state.start_button.disabled = false;
+        }
+        return;
+    }
+    const number = g_state.time_input.value;
+    const numberAsInt = parseInt(number);
+    if ((number != numberAsInt || number < 1)) {
+        if (g_state.time_tostop) {
+            time_input.value = g_state.time_tostop;
+        }
+        else {
+            time_input.value = "";
+        }
+    }
+    else { //valid_input
+        g_state.time_tostop = time_input.value;
+        if (g_state.circles.length != 1) {
+            g_state.start_button.disabled = false;
+        }
+    }
+}
+
+
 function create_circle(x, y, speed_x, speed_y) {
     const new_circle = document.createElement("div");
     new_circle.className = "circle";
@@ -208,10 +260,6 @@ function create_circle(x, y, speed_x, speed_y) {
 
 
     };
-
-
-
-    //new_circle.move();
 
     return new_circle;
 }
