@@ -82,11 +82,11 @@ function is_border_collition(circle) {
 }
 
 function is_ball_collition(circle1, circle2) {
-    const size = g_state.ball_size;
+    const size = g_state.ball_size - 5;
     return circle1.x <= circle2.x + size
         && circle1.x + size >= circle2.x
         && circle1.y <= circle2.y + size
-        && circle1.y + size > circle2.y;
+        && circle1.y + size >= circle2.y;
 
 }
 function pause_button_click() {
@@ -163,7 +163,7 @@ function make_ball_collition_sound() {
 }
 
 function create_random_circle(x, y) {
-    const max_speed = 3;
+    const max_speed = 4;
     const x_speed = random(max_speed * 2) + 1;
     const y_speed = random(max_speed * 2) + 1;
     console.log("x speed = " + x_speed + " y speed = " + y_speed);
