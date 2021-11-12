@@ -5,7 +5,9 @@ initButtons();
 initGame();
 
 window.addEventListener('resize', function (event) {
-    console.log("here dude");
+    if (!g_state.gameLoop) {
+        fix_circles_positions();
+    }
 });
 
 function random(number) {
@@ -155,10 +157,10 @@ function initGame() {
     g_state.board = document.querySelector("#GameBoard");
     g_state.time_input = document.querySelector("#time_input");
     g_state.time_input.addEventListener("input", time_input_value_change);
-    g_state.board.style.width = parseInt((0.9 * screen_width)) + "px";
+    // g_state.board.style.width = parseInt((0.9 * screen_width)) + "px";
     g_state.board.style.height = parseInt((0.5 * screen_height)) + "px";
     const buttons_panel = document.querySelector("#ButtonsPanel");
-    buttons_panel.style.top = (parseInt((0.5 * screen_height)) + 50) + "px";
+    buttons_panel.style.top = (parseInt((0.5 * screen_height)) + 10) + "px";
 
     console.log(g_state.board.style.width);
     g_state.refresh_rate = 20;
@@ -229,7 +231,33 @@ function time_input_value_change() {
     }
 }
 
+function fix_circle_position(circle) {
+    if (circle.x < 0) {
+        circle.x = 0;
+    }
+    else if (circle.x + 50 > g_state.get_width()) {
+        circle.x = g_state.get_width() - 50;
+    }
 
+    if (circle.y < 0) {
+        circle.y = 0;
+    }
+    else if (circle.y + 50 > g_state.get_height()) {
+        circle.y = g_state.get_height() - 50;
+    }
+
+    circle.style.top = circle.y + "px";
+    circle.style.left = circle.x + "px";
+
+
+}
+function fix_circles_positions() {
+    const circles = g_state.circles;
+    console.log("here dude");
+    for (let circle of circles) {
+        fix_circle_position(circle);
+    }
+}
 function create_circle(x, y, speed_x, speed_y) {
     const new_circle = document.createElement("div");
     new_circle.className = "circle";
@@ -258,18 +286,20 @@ function create_circle(x, y, speed_x, speed_y) {
         }
         if (new_circle.y + 50 > g_state.get_height()) {
             new_circle.speed_y = Math.abs(speed_y) * -1;
+
         }
 
         if (new_circle.x < 0) {
             new_circle.speed_x = Math.abs(speed_x);
+
         }
 
         if (new_circle.x + 50 > g_state.get_width()) {
             new_circle.speed_x = Math.abs(speed_x) * -1;
+
         }
 
-        new_circle.y %= g_state.get_height() + 1;
-        new_circle.x %= g_state.get_width() + 1;
+        fix_circle_position(new_circle);
 
     };
 

@@ -5,14 +5,15 @@ body{
 {
    
    
-    height: 500px;
-    width:10px;
+    height: 50%;
+    width:80%;
     left:20px;
     min-width: 10px;
+    min-height: 200px;
     max-width: 1500px;
     border:solid;
     position:absolute;
-    top:50px;
+    top:10px;
 }
 
 
@@ -31,7 +32,7 @@ body{
 {
     margin-top:10px;
     position:absolute;
-    top:700px;
+    top:55%;
     left:7%;
 }
 #ButtonsPanel :nth-child(n)
