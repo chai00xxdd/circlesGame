@@ -75,15 +75,26 @@ function animate_circles() {
         g_state.start_button.disabled = true;
     }
 
+    if (g_state.circles.length == 1) {
+        g_state.game_message.innerHTML = "one ball left ===> stoping";
+    }
+
+    if ((time_value.length != 0 && time_value == 0)) {
+        g_state.game_message.innerHTML = "time over ===> pausing";
+    }
+
 
 }
 
 function start_button_click() {
 
+    g_state.start_button.disabled = true;
     window.onbeforeunload = function (e) {
         return "are you sure you want to exit";
     };
+
     console.log("start clicked");
+    g_state.game_message.innerHTML = "";
     g_state.startGame();
     //  g_state.time_input.value = 5;
 
@@ -107,6 +118,9 @@ function is_ball_collition(circle1, circle2) {
 
 }
 function pause_button_click() {
+    const time_value = g_state.time_input.value;
+    const start_button_disable = (g_state.circles.length == 1 || (time_value.length != 0 && time_value == 0));
+    g_state.start_button.disabled = start_button_disable;
     window.onbeforeunload = null;
     console.log("pause clicked");
     g_state.time_input.disabled = false;
@@ -126,6 +140,8 @@ function reset_button_click() {
     for (let circle in g_state.circle) {
         circle.remove();
     }
+
+    g_state.game_message.innerHTML = "";
 
     const width = g_state.get_width();
     const height = g_state.get_height();
@@ -155,12 +171,13 @@ function initGame() {
     g_state.time_tostop = null;
     g_state.time_passed = 0;
     g_state.board = document.querySelector("#GameBoard");
+    g_state.game_message = document.querySelector("#game_message");
     g_state.time_input = document.querySelector("#time_input");
     g_state.time_input.addEventListener("input", time_input_value_change);
     // g_state.board.style.width = parseInt((0.9 * screen_width)) + "px";
     g_state.board.style.height = parseInt((0.5 * screen_height)) + "px";
-    const buttons_panel = document.querySelector("#ButtonsPanel");
-    buttons_panel.style.top = (parseInt((0.5 * screen_height)) + 10) + "px";
+    const control_panel = document.querySelector("#ControlPanel");
+    control_panel.style.top = (parseInt((0.5 * screen_height)) + 10) + "px";
 
     console.log(g_state.board.style.width);
     g_state.refresh_rate = 20;
