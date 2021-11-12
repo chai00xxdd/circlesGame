@@ -177,7 +177,7 @@ function initGame() {
     // g_state.board.style.width = parseInt((0.9 * screen_width)) + "px";
     g_state.board.style.height = parseInt((0.5 * screen_height)) + "px";
     const control_panel = document.querySelector("#ControlPanel");
-    control_panel.style.top = (parseInt((0.5 * screen_height)) + 10) + "px";
+    control_panel.style.top = (parseInt((0.5 * screen_height)) + 20) + "px";
 
     console.log(g_state.board.style.width);
     g_state.refresh_rate = 20;
