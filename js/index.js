@@ -12,11 +12,11 @@ function initButtons() {
     const start_button = document.querySelector("#start_button");
     const pause_button = document.querySelector("#pause_button");
     const reset_button = document.querySelector("#reset_button");
-    const add_circle_button = document.querySelector("#add_circle_button");
+
     start_button.addEventListener("click", start_button_click);
     pause_button.addEventListener("click", pause_button_click);
     reset_button.addEventListener("click", reset_button_click);
-    add_circle_button.addEventListener("click", add_button_click);
+
     g_state.reset_button = reset_button;
     g_state.pause_button = pause_button;
     g_state.start_button = start_button;
@@ -70,9 +70,7 @@ function start_button_click() {
 
 }
 
-function add_button_click() {
 
-}
 
 function is_border_collition(circle) {
     return (circle.x + 50 > g_state.get_width())
@@ -98,7 +96,8 @@ function pause_button_click() {
 
 function reset_button_click() {
 
-
+    g_state.pauseGame();
+    g_state.time_input.disabled = false;
     for (let circle in g_state.circle) {
         circle.remove();
     }
@@ -129,10 +128,11 @@ function initGame() {
     //  console.log(screen_width);
     g_state.circles = [];
     g_state.board = document.querySelector("#GameBoard");
+    g_state.time_input = document.querySelector("#time_input");
     g_state.board.style.width = parseInt((0.9 * screen_width)) + "px";
     g_state.board.style.height = parseInt((0.5 * screen_height)) + "px";
     const buttons_panel = document.querySelector("#ButtonsPanel");
-    buttons_panel.style.top = (parseInt((0.5 * screen_height)) + 200) + "px";
+    buttons_panel.style.top = (parseInt((0.5 * screen_height)) + 50) + "px";
 
     console.log(g_state.board.style.width);
     g_state.delay = 1000;
@@ -149,6 +149,7 @@ function initGame() {
         g_state.gameLoop = null;
     }
     g_state.startGame = function () {
+        g_state.time_input.disabled = true;
         if (g_state.gameLoop == null) {
             g_state.gameLoop = setInterval(animate_circles, 20);
         }
