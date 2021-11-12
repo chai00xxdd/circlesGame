@@ -125,10 +125,15 @@ function reset_button_click() {
 }
 function initGame() {
     const screen_width = screen.width;
+    const screen_height = screen.height;
     //  console.log(screen_width);
     g_state.circles = [];
     g_state.board = document.querySelector("#GameBoard");
-    g_state.board.style.width = parseInt((0.6 * screen_width)) + "px";
+    g_state.board.style.width = parseInt((0.9 * screen_width)) + "px";
+    g_state.board.style.height = parseInt((0.5 * screen_height)) + "px";
+    const buttons_panel = document.querySelector("#ButtonsPanel");
+    buttons_panel.style.top = (parseInt((0.5 * screen_height)) + 200) + "px";
+
     console.log(g_state.board.style.width);
     g_state.delay = 1000;
     g_state.gameLoop = null;
