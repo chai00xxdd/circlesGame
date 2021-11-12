@@ -4,6 +4,9 @@ g_state.x = 5;
 initButtons();
 initGame();
 
+window.addEventListener('resize', function (event) {
+    console.log("here dude");
+});
 
 function random(number) {
     return parseInt(Math.random() * number);
@@ -247,17 +250,26 @@ function create_circle(x, y, speed_x, speed_y) {
 
 
     new_circle.handle_board_collition = function () {
-        if (new_circle.y < 0 || new_circle.y + 50 > g_state.get_height()) {
-            new_circle.speed_y *= -1;
-            new_circle.y %= g_state.get_height() + 1;
+
+        const speed_y = new_circle.speed_y;
+        const speed_x = new_circle.speed_x;
+        if (new_circle.y < 0) {
+            new_circle.speed_y = Math.abs(speed_y);
+        }
+        if (new_circle.y + 50 > g_state.get_height()) {
+            new_circle.speed_y = Math.abs(speed_y) * -1;
         }
 
-        if (new_circle.x < 0 || new_circle.x + 50 > g_state.get_width()) {
-            new_circle.speed_x *= -1;
-            new_circle.x %= g_state.get_width() + 1;
-
+        if (new_circle.x < 0) {
+            new_circle.speed_x = Math.abs(speed_x);
         }
 
+        if (new_circle.x + 50 > g_state.get_width()) {
+            new_circle.speed_x = Math.abs(speed_x) * -1;
+        }
+
+        new_circle.y %= g_state.get_height() + 1;
+        new_circle.x %= g_state.get_width() + 1;
 
     };
 
