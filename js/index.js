@@ -7,21 +7,16 @@ initAll();
 function initAll() {
     initButtons();
     initGame();
-
-
+    fix_responsive();
     window.addEventListener('resize', function (event) {
-
-        if (screen.height > 700) {
-            g_state.board.style.minHeight = "500px";
-        }
-        else {
-            g_state.board.style.minHeight = "70%";
-        }
-        g_state.control_panel.style.top = (g_state.board.offsetHeight + g_state.board.offsetTop + 10) + "px";
+        fix_responsive();
         if (!g_state.game_loop) {
             fix_circles_positions();
         }
     });
+}
+
+function fix_responsive() {
     if (screen.height > 700) {
         g_state.board.style.minHeight = "500px";
     }
@@ -32,7 +27,6 @@ function initAll() {
 }
 
 function random_speed(max_speed) {
-
     const direction = Math.random() > 0.5 ? 1 : - 1;
     return (parseInt(Math.random() * max_speed) + 1) * direction;
 
@@ -53,7 +47,6 @@ function initButtons() {
 }
 
 function check_handle_board_collition() {
-
     let circles = g_state.circles;
     for (let circle of circles) {
         circle.move();
@@ -65,7 +58,6 @@ function check_handle_board_collition() {
 }
 
 function check_handle_balls_collition() {
-
     const circles = g_state.circles;
     const circles_collition = new Array(circles.length).fill(false);
     const circles_left = [];
@@ -88,7 +80,6 @@ function check_handle_balls_collition() {
     }
 
     g_state.circles = circles_left;
-
 }
 
 function decrease_timer() {
@@ -117,29 +108,23 @@ function check_handle_game_over() {
     if ((time_value.length != 0 && time_value == 0)) {
         g_state.game_message.innerHTML = "time over ===> pausing";
     }
-
 }
 
 function animate_circles() {
-
     check_handle_board_collition();
     check_handle_balls_collition();
     decrease_timer();
     check_handle_game_over();
-
 }
 
 function start_button_click() {
-
     g_state.start_button.disabled = true;
     window.onbeforeunload = function (e) {
         return "are you sure you want to exit";
     };
 
-
     g_state.game_message.innerHTML = "";
-    g_state.startGame();
-
+    g_state.start_game();
 }
 
 
@@ -165,7 +150,7 @@ function pause_button_click() {
     g_state.start_button.disabled = start_button_disable;
     window.onbeforeunload = null;
     g_state.time_input.disabled = false;
-    g_state.pauseGame();
+    g_state.pause_game();
 }
 
 function reset_balls() {
@@ -175,22 +160,21 @@ function reset_balls() {
     const width = g_state.get_width();
     const height = g_state.get_height();
     const ball_size = g_state.ball_size;
-    const topBall = create_random_circle(Math.random() * (width - ball_size), 0);
-    const downBall = create_random_circle(Math.random() * (width - ball_size), height - ball_size);
-    const leftBall = create_random_circle(0, Math.random() * (height - ball_size));
-    const rightBall = create_random_circle(width - ball_size, Math.random() * (height - ball_size));
+    const top_ball = create_random_circle(Math.random() * (width - ball_size), 0);
+    const down_ball = create_random_circle(Math.random() * (width - ball_size), height - ball_size);
+    const left_ball = create_random_circle(0, Math.random() * (height - ball_size));
+    const right_ball = create_random_circle(width - ball_size, Math.random() * (height - ball_size));
     g_state.board.innerHTML = "";
     g_state.circles = [];
-    const circles = [topBall, downBall, leftBall, rightBall];
+    const circles = [top_ball, down_ball, left_ball, right_ball];
     for (const circle of circles) {
-        g_state.addCircle(circle);
+        g_state.add_circle(circle);
 
     }
 }
 
 function reset_button_click() {
-
-    g_state.pauseGame();
+    g_state.pause_game();
     g_state.time_passed = 0;
     g_state.start_button.disabled = false;
     if (g_state.time_tostop != null) {
@@ -202,9 +186,6 @@ function reset_button_click() {
     reset_balls();
 }
 function initGame() {
-
-    const screen_height = screen.height;
-
     g_state.circles = [];
     g_state.time_tostop = null;
     g_state.time_passed = 0;
@@ -219,22 +200,20 @@ function initGame() {
 
     init_gstate_functions();
     reset_button_click();
-
 }
 
 function init_gstate_functions() {
-
     g_state.get_width = function () { return g_state.board.clientWidth; }
     g_state.get_height = function () { return g_state.board.clientHeight; }
-    g_state.addCircle = function (circle) {
+    g_state.add_circle = function (circle) {
         g_state.circles.push(circle);
         g_state.board.append(circle);
     };
-    g_state.pauseGame = function () {
+    g_state.pause_game = function () {
         clearInterval(g_state.game_loop);
         g_state.game_loop = null;
     }
-    g_state.startGame = function () {
+    g_state.start_game = function () {
         g_state.time_input.disabled = true;
         if (g_state.game_loop == null) {
             g_state.game_loop = setInterval(animate_circles, g_state.refresh_rate);
@@ -330,8 +309,6 @@ function create_circle(x, y, speed_x, speed_y) {
 
 
 function circle_board_collition(new_circle) {
-
-
     const speed_y = new_circle.speed_y;
     const speed_x = new_circle.speed_x;
 
@@ -354,6 +331,4 @@ function circle_board_collition(new_circle) {
     }
 
     fix_circle_position(new_circle);
-
-
 }
