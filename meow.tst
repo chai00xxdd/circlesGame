@@ -1,18 +1,14 @@
 
 const g_state = {};
-initAll();
+g_state.x = 5;
+initButtons();
+initGame();
 
-
-
-function initAll() {
-    initButtons();
-    initGame();
-    window.addEventListener('resize', function (event) {
-        if (!g_state.game_loop) {
-            fix_circles_positions();
-        }
-    });
-}
+window.addEventListener('resize', function (event) {
+    if (!g_state.gameLoop) {
+        fix_circles_positions();
+    }
+});
 
 function random_speed(max_speed) {
 
@@ -20,7 +16,9 @@ function random_speed(max_speed) {
     return (parseInt(Math.random() * max_speed) + 1) * direction;
 
 }
-
+function random(number) {
+    return parseInt(Math.random() * number);
+}
 function initButtons() {
     const start_button = document.querySelector("#start_button");
     const pause_button = document.querySelector("#pause_button");
@@ -105,6 +103,7 @@ function check_handle_game_over() {
 
 function animate_circles() {
 
+
     check_handle_board_collition();
     check_handle_balls_collition();
     decrease_timer();
@@ -119,9 +118,10 @@ function start_button_click() {
         return "are you sure you want to exit";
     };
 
-
+    console.log("start clicked");
     g_state.game_message.innerHTML = "";
     g_state.startGame();
+    //  g_state.time_input.value = 5;
 
 }
 
@@ -147,6 +147,7 @@ function pause_button_click() {
     const start_button_disable = (g_state.circles.length == 1 || (time_value.length != 0 && time_value == 0));
     g_state.start_button.disabled = start_button_disable;
     window.onbeforeunload = null;
+    console.log("pause clicked");
     g_state.time_input.disabled = false;
     g_state.pauseGame();
 }
@@ -162,6 +163,7 @@ function reset_balls() {
     const downBall = create_random_circle(Math.random() * (width - ball_size), height - ball_size);
     const leftBall = create_random_circle(0, Math.random() * (height - ball_size));
     const rightBall = create_random_circle(width - ball_size, Math.random() * (height - ball_size));
+    console.log("x = " + rightBall.x + "width = " + width);
     g_state.board.innerHTML = "";
     g_state.circles = [];
     const circles = [topBall, downBall, leftBall, rightBall];
@@ -185,9 +187,9 @@ function reset_button_click() {
     reset_balls();
 }
 function initGame() {
-
+    const screen_width = screen.width;
     const screen_height = screen.height;
-
+    //  console.log(screen_width);
     g_state.circles = [];
     g_state.time_tostop = null;
     g_state.time_passed = 0;
@@ -195,17 +197,14 @@ function initGame() {
     g_state.game_message = document.querySelector("#game_message");
     g_state.time_input = document.querySelector("#time_input");
     g_state.time_input.addEventListener("input", time_input_value_change);
+    // g_state.board.style.width = parseInt((0.9 * screen_width)) + "px";
+    g_state.board.style.height = parseInt((0.5 * screen_height)) + "px";
+    const control_panel = document.querySelector("#ControlPanel");
+    control_panel.style.top = (parseInt((0.5 * screen_height)) + 25) + "px";
+
     g_state.refresh_rate = 20;
-    g_state.game_loop = null;
+    g_state.gameLoop = null;
     g_state.ball_size = 50;
-
-    init_gstate_functions();
-    reset_button_click();
-
-}
-
-function init_gstate_functions() {
-
     g_state.get_width = function () { return g_state.board.clientWidth; }
     g_state.get_height = function () { return g_state.board.clientHeight; }
     g_state.addCircle = function (circle) {
@@ -213,15 +212,20 @@ function init_gstate_functions() {
         g_state.board.append(circle);
     };
     g_state.pauseGame = function () {
-        clearInterval(g_state.game_loop);
-        g_state.game_loop = null;
+        clearInterval(g_state.gameLoop);
+        g_state.gameLoop = null;
     }
     g_state.startGame = function () {
         g_state.time_input.disabled = true;
-        if (g_state.game_loop == null) {
-            g_state.game_loop = setInterval(animate_circles, g_state.refresh_rate);
+        if (g_state.gameLoop == null) {
+            g_state.gameLoop = setInterval(animate_circles, g_state.refresh_rate);
         }
     }
+
+    let width = g_state.get_width();
+    reset_button_click();
+
+
 
 }
 
@@ -230,9 +234,9 @@ function make_ball_collition_sound() {
 }
 
 function create_random_circle(x, y) {
-    const max_speed = 5;
-    const x_speed = random_speed(max_speed * 3);
-    const y_speed = random_speed(max_speed * 2);
+    const max_speed = 4;
+    const x_speed = random(max_speed * 2) + 1;
+    const y_speed = random(max_speed * 2) + 1;
     console.log("x speed = " + x_speed + " y speed = " + y_speed);
     return create_circle(x, y, x_speed, y_speed);
 }
@@ -286,6 +290,7 @@ function fix_circle_position(circle) {
 }
 function fix_circles_positions() {
     const circles = g_state.circles;
+    console.log("here dude");
     for (let circle of circles) {
         fix_circle_position(circle);
     }
@@ -310,14 +315,15 @@ function create_circle(x, y, speed_x, speed_y) {
     return new_circle;
 }
 
-
+//circle functions
 function circle_board_collition(new_circle) {
 
 
     const speed_y = new_circle.speed_y;
     const speed_x = new_circle.speed_x;
 
-    if (new_circle.y < 0) {
+    if (this.y < 0) {
+        console.log("speed y =" + Math.abs(speed_y));
         new_circle.speed_y = Math.abs(speed_y);
     }
     if (new_circle.y + 50 > g_state.get_height()) {
