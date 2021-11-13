@@ -30,6 +30,7 @@ body{
 
 #ControlPanel
 {
+    top:55%;
     margin-top:10px;
     position:absolute;
     left:7%;
@@ -40,7 +41,20 @@ body{
   
 }
 
+@media only screen and (min-width: 768px) {
 
+    
+    #GameBoard
+    {
+        height:500px;
+    }
 
+    #ControlPanel
+    {
+        top:550px;
+    }
+
+    
+}
 
 
