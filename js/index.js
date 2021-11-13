@@ -2,8 +2,6 @@
 const g_state = {};
 initAll();
 
-
-
 function initAll() {
     initButtons();
     initGame();
@@ -236,6 +234,7 @@ function create_random_circle(x, y) {
 
 function time_input_value_change() {
 
+
     if (g_state.time_input.value.length == 0) {
         g_state.time_tostop = null;
         if (g_state.circles.length != 1) {
@@ -245,6 +244,7 @@ function time_input_value_change() {
     }
     const number = g_state.time_input.value;
     const numberAsInt = parseInt(number);
+    console.log("number = " + number + ", numberAsInt = " + numberAsInt);
     if ((number != numberAsInt || number < 1)) {
         if (g_state.time_tostop) {
             time_input.value = g_state.time_tostop;
