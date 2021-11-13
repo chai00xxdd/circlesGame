@@ -7,7 +7,7 @@ initAll();
 function initAll() {
     initButtons();
     initGame();
-    if (screen.height > 700) {
+    if (screen.height > 900) {
         g_state.board.style.minHeight = "500px";
     }
     window.addEventListener('resize', function (event) {
