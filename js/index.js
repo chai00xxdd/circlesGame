@@ -8,10 +8,15 @@ function initAll() {
     initButtons();
     initGame();
 
-    window.addEventListener('resize', function (event) {
+    window.addEventListener('deviceorientation', function (event) {
+
         if (screen.height > 700) {
+            console.log(screen.height);
             g_state.board.style.minHeight = "500px";
         }
+    });
+    window.addEventListener('resize', function (event) {
+
         g_state.control_panel.style.top = (g_state.board.offsetHeight + g_state.board.offsetTop + 10) + "px";
         if (!g_state.game_loop) {
             fix_circles_positions();
