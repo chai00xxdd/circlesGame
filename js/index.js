@@ -8,10 +8,12 @@ function initAll() {
     initButtons();
     initGame();
     window.addEventListener('resize', function (event) {
+        g_state.control_panel.style.top = (g_state.board.offsetHeight + g_state.board.offsetTop + 10) + "px";
         if (!g_state.game_loop) {
             fix_circles_positions();
         }
     });
+    g_state.control_panel.style.top = (g_state.board.offsetHeight + g_state.board.offsetTop + 10) + "px";
 }
 
 function random_speed(max_speed) {
@@ -192,6 +194,7 @@ function initGame() {
     g_state.time_tostop = null;
     g_state.time_passed = 0;
     g_state.board = document.querySelector("#GameBoard");
+    g_state.control_panel = document.querySelector("#ControlPanel");
     g_state.game_message = document.querySelector("#game_message");
     g_state.time_input = document.querySelector("#time_input");
     g_state.time_input.addEventListener("input", time_input_value_change);
