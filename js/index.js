@@ -239,7 +239,6 @@ function create_random_circle(x, y) {
     const max_speed = 5;
     const x_speed = random_speed(max_speed * 3);
     const y_speed = random_speed(max_speed * 2);
-    console.log("x speed = " + x_speed + " y speed = " + y_speed);
     return create_circle(x, y, x_speed, y_speed);
 }
 
@@ -254,9 +253,8 @@ function time_input_value_change() {
         return;
     }
     const number = g_state.time_input.value;
-    const numberAsInt = parseInt(number);
-    console.log("number = " + number + ", numberAsInt = " + numberAsInt);
-    if ((number != numberAsInt || number < 1)) {
+    const number_as_int = parseInt(number);
+    if ((number != number_as_int || number < 1)) {
         if (g_state.time_tostop) {
             time_input.value = g_state.time_tostop;
         }
