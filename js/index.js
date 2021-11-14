@@ -14,6 +14,8 @@ function initAll() {
     });
 }
 
+
+
 function fix_responsive() {
     if (screen.height > 700) {
         g_state.board.style.minHeight = "500px";
@@ -23,6 +25,8 @@ function fix_responsive() {
     }
     g_state.control_panel.style.top = (g_state.board.offsetHeight + g_state.board.offsetTop + 10) + "px";
 }
+
+
 
 function random_speed(max_speed) {
     const direction = Math.random() > 0.5 ? 1 : - 1;
@@ -122,6 +126,7 @@ function start_button_click() {
     };
 
     g_state.game_message.innerHTML = "";
+    g_state.is_reset = false;
     g_state.start_game();
 }
 
@@ -162,6 +167,10 @@ function reset_balls() {
     const down_ball = create_random_circle(Math.random() * (width - ball_size), height - ball_size);
     const left_ball = create_random_circle(0, Math.random() * (height - ball_size));
     const right_ball = create_random_circle(width - ball_size, Math.random() * (height - ball_size));
+    g_state.top_ball = top_ball;
+    g_state.down_ball = down_ball;
+    g_state.left_ball = left_ball;
+    g_state.right_ball = right_ball;
     g_state.board.innerHTML = "";
     g_state.circles = [];
     const circles = [top_ball, down_ball, left_ball, right_ball];
@@ -180,11 +189,13 @@ function reset_button_click() {
     }
     g_state.game_message.innerHTML = "";
     g_state.time_input.disabled = false;
+    g_state.is_reset = true;
 
     reset_balls();
 }
 function initGame() {
     g_state.circles = [];
+    g_state.is_reset = false;
     g_state.time_tostop = null;
     g_state.time_passed = 0;
     g_state.board = document.querySelector("#GameBoard");
@@ -286,6 +297,18 @@ function fix_circles_positions() {
     for (let circle of circles) {
         fix_circle_position(circle);
     }
+    if (g_state.is_reset) {
+        g_state.top_ball.y = 0;
+        g_state.top_ball.style.top = "0px";
+        g_state.left_ball.x = 0;
+        g_state.left_ball.style.left = "0px";
+        g_state.right_ball.x = g_state.get_width() - g_state.ball_size;
+        g_state.right_ball.style.left = g_state.right_ball.x + "px";
+        g_state.down_ball.y = g_state.get_height() - g_state.ball_size;
+        g_state.down_ball.style.top = g_state.down_ball.y + "px";
+
+    }
+
 }
 function create_circle(x, y, speed_x, speed_y) {
     const new_circle = document.createElement("div");
