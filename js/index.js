@@ -1,6 +1,7 @@
 
 const g_state = {};
 initAll();
+console.log("15px".substring(0, "15px".length - 2));
 
 function initAll() {
     initButtons();
@@ -133,10 +134,10 @@ function start_button_click() {
 
 
 function is_border_collition(circle) {
-    return (circle.x + 50 > g_state.get_width())
+    return (circle.x + g_state.ball_size > g_state.get_width())
         || (circle.x < 0)
         || (circle.y < 0)
-        || (circle.y + 50 > g_state.get_height());
+        || (circle.y + g_state.ball_size > g_state.get_height());
 }
 
 function is_ball_collition(circle1, circle2) {
@@ -184,6 +185,7 @@ function reset_button_click() {
     g_state.pause_game();
     g_state.time_passed = 0;
     g_state.start_button.disabled = false;
+    window.onbeforeunload = null;
     if (g_state.time_tostop != null) {
         g_state.time_input.value = g_state.time_tostop;
     }
@@ -205,12 +207,20 @@ function initGame() {
     g_state.time_input.addEventListener("input", time_input_value_change);
     g_state.refresh_rate = 20;
     g_state.game_loop = null;
-    g_state.ball_size = 50;
-
+    g_state.ball_size = get_ball_size();
     init_gstate_functions();
     reset_button_click();
 }
 
+function get_ball_size() {
+    const ball = document.createElement("div");
+    ball.className = "circle";
+    ball.style.visible = "none";
+    g_state.control_panel.append(ball);
+    const ball_size = ball.getBoundingClientRect().width;
+    ball.remove();
+    return ball_size;
+}
 function init_gstate_functions() {
     g_state.get_width = function () { return g_state.board.clientWidth; }
     g_state.get_height = function () { return g_state.board.clientHeight; }
@@ -271,18 +281,19 @@ function time_input_value_change() {
 }
 
 function fix_circle_position(circle) {
+    const ball_size = g_state.ball_size;
     if (circle.x < 0) {
         circle.x = 0;
     }
-    else if (circle.x + 50 > g_state.get_width()) {
-        circle.x = g_state.get_width() - 50;
+    else if (circle.x + ball_size > g_state.get_width()) {
+        circle.x = g_state.get_width() - ball_size;
     }
 
     if (circle.y < 0) {
         circle.y = 0;
     }
-    else if (circle.y + 50 > g_state.get_height()) {
-        circle.y = g_state.get_height() - 50;
+    else if (circle.y + ball_size > g_state.get_height()) {
+        circle.y = g_state.get_height() - ball_size;
     }
 
     circle.style.top = circle.y + "px";
@@ -332,11 +343,12 @@ function create_circle(x, y, speed_x, speed_y) {
 function circle_board_collition(new_circle) {
     const speed_y = new_circle.speed_y;
     const speed_x = new_circle.speed_x;
+    const ball_size = g_state.ball_size;
 
     if (new_circle.y < 0) {
         new_circle.speed_y = Math.abs(speed_y);
     }
-    if (new_circle.y + 50 > g_state.get_height()) {
+    if (new_circle.y + ball_size > g_state.get_height()) {
         new_circle.speed_y = Math.abs(speed_y) * -1;
 
     }
@@ -346,7 +358,7 @@ function circle_board_collition(new_circle) {
 
     }
 
-    if (new_circle.x + 50 > g_state.get_width()) {
+    if (new_circle.x + ball_size > g_state.get_width()) {
         new_circle.speed_x = Math.abs(speed_x) * -1;
 
     }
